@@ -1,0 +1,26 @@
+version: '3'
+services:
+  traefik:
+    image: traefik:alpine
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro,Z
+      - ./traefik.toml:/traefik.toml:ro,Z
+      - ./acme.json:/acme.json:Z
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    labels:
+      - "traefik.frontend.rule=Host:tes-traefik.akhfa.me"
+      - "traefik.port=8080"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.frameDeny=true"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.STSPreload=true"
+    restart: always
+    networks:
+      - apps
+
+networks:
+  apps:

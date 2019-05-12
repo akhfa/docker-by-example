@@ -1,0 +1,33 @@
+version: '3'
+services:
+  database:
+    image: mariadb:10.3.13-bionic
+    volumes:
+      - dbdata:/var/lib/mysql:rw,Z
+    env_file:
+      - db-secret.env
+    labels:
+      - "traefik.enable=false"
+    restart: always
+    networks:
+      - apps
+  adminer:
+    image: adminer
+    labels:
+      - "traefik.frontend.rule=Host:tes-adminer"
+      - "traefik.port=8080"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.frameDeny=true"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.STSPreload=true"
+      - "traefik.frontend.rateLimit.extractorFunc=client.ip"
+      - "traefik.frontend.rateLimit.rateSet.loginrate.period=1"
+      - "traefik.frontend.rateLimit.rateSet.loginrate.average=1"
+      - "traefik.frontend.rateLimit.rateSet.loginrate.burst=3"
+      - "traefik.frontend.headers.customResponseHeaders=Server:AmazonS3||x-powered-by:nginx"
+    restart: always
+    networks:
+      - apps
+volumes:
+  dbdata:

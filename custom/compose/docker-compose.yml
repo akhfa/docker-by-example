@@ -1,0 +1,14 @@
+version: '3'
+services:
+  tebakangka:
+    build: .
+    labels:
+      - "traefik.frontend.rule=Host:tes-tebak.akhfa.me"
+      - "traefik.port=18080"
+    restart: always
+    networks:
+      - apps
+networks:
+  apps:
+    external:
+      name: traefik_apps

@@ -14,7 +14,7 @@ services:
   adminer:
     image: adminer
     labels:
-      - "traefik.frontend.rule=Host:tes-adminer"
+      - "traefik.frontend.rule=Host:tes-adminer.akhfa.me"
       - "traefik.port=8080"
       - "traefik.frontend.headers.browserXSSFilter=true"
       - "traefik.frontend.headers.contentTypeNosniff=true"
@@ -25,9 +25,13 @@ services:
       - "traefik.frontend.rateLimit.rateSet.loginrate.period=1"
       - "traefik.frontend.rateLimit.rateSet.loginrate.average=1"
       - "traefik.frontend.rateLimit.rateSet.loginrate.burst=3"
-      - "traefik.frontend.headers.customResponseHeaders=Server:AmazonS3||x-powered-by:nginx"
     restart: always
     networks:
       - apps
 volumes:
   dbdata:
+
+networks:
+  apps:
+    external:
+      name: traefik_apps
